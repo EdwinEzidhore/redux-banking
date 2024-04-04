@@ -24,10 +24,10 @@ function CustomerReducer(state = CustomerAccount, action) {
 
 //Customer Action creators start
 export function createCustomer(name,id) {
-    return { type: 'customer/addcustomer', payload: {name,id}} 
+    return { type: 'customer/addcustomer', payload:{name,id} } 
 }
 export function updateCustomer(fullname) {
-    return { type:'customer/updatename',payload:fullname}
+    return { type:'customer/updatcustomer',payload:fullname}
 }
 //Customer Reducer function end
 

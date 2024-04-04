@@ -1,16 +1,17 @@
 
 
-const initialstate = {
+export const initialstate = {
     balance: 0,
     loan: 0,
-    loanpurpose: ''
+    loanpurpose: '',
+    isloading:false
 };
 
 //Account Reducer function
 function Accountreducer(state=initialstate, action) {
     switch (action.type) {
         case 'account/deposit': return {
-            ...state, balance: state.balance + action.payload
+            ...state, balance: state.balance + action.payload,isloading:false
         }
 
         case 'account/withdraw': return {
@@ -31,6 +32,10 @@ function Accountreducer(state=initialstate, action) {
             balance: state.balance - state.loan
             
         };
+        case 'account/convertingcurrency': return {
+            ...state,
+            isloading:true
+        }
         default:return state
     }
 };
@@ -38,8 +43,15 @@ function Accountreducer(state=initialstate, action) {
 
 
 //Account Action creators start
-export function deposit(amount) {
-    return { type: 'account/depossit', payload: amount };
+export function deposit(amount,currency) {
+    if (currency === 'INR') return { type: 'account/deposit', payload: amount };
+    return async function (dispatch,getstate) {//async goes to thunk .dispatch and getstate is provided by thunk
+        dispatch({type:'account/convertingcurrency'})
+        const response = await fetch(`https://api.frankfurter.app/latest?amount=${amount}&from=${currency}&to=INR`);
+        const data = await response.json();
+        const convertedAmount = data.rates.INR;
+        dispatch({ type: 'account/deposit', payload: convertedAmount });
+    }
 }
 
 export function withdraw(amount) {
