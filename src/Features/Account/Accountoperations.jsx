@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deposit, requestloan, withdraw ,initialstate, payloan} from '../Account/AccountSlice';
+import { deposit, requestloan, withdraw , payloan} from '../Account/AccountSlice';
 
 function AccountOperations() {
 
@@ -22,7 +22,6 @@ function AccountOperations() {
   function handleDeposit() {
     if (!depositAmount) return
     dispatch(deposit(depositAmount,currency));
-    console.log(initialstate);
     setDepositAmount('');
   }
 
